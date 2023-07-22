@@ -18,5 +18,23 @@ code {
   --mui-palette-primary-light: #42a5f5;
   --mui-palette-primary-dark: #1565c0;
   --mui-palette-primary-contrastText: #fff;
-  /* ...other variables */
+
+  --chatgpt-secondary-main: #03dac5;
+  --chatgpt-secondary-light: #62eddf;
+  --chatgpt-secondary-dark: #018786;
+  --chatgpt-secondary-contrastText: #000;
+
+  --chatgpt-background-default: #f0f0f0;
+  --chatgpt-background-paper: #fff;
+
+  --chatgpt-text-primary: #333;
+  --chatgpt-text-secondary: #777;
+
+  --chatgpt-error: #b00020;
+  --chatgpt-warning: #ffa000;
+  --chatgpt-success: #388e3c;
+
+  --chatgpt-background-sidebar: #202123;
+  --chatgpt-background-content: #444654;
+
 }
