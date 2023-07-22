@@ -10,7 +10,7 @@ import Reports from './pages/Reports';
 import Config from './pages/Config';
 
 const App: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
     <Router>
