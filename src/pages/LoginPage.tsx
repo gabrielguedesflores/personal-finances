@@ -8,17 +8,19 @@ const LoginPage: React.FC<{ isLoggedIn: boolean; setIsLoggedIn: (value: boolean)
   const theme = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [userId, setUserId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const handleLogin = () => {
     // Lógica de autenticação
-    if (email.trim() === '' || password.trim() === '') {
-      alert('Por favor, preencha todos os campos.');
-      return;
-    }
+    // if (email.trim() === '' || password.trim() === '') {
+    //   alert('Por favor, preencha todos os campos.');
+    //   return;
+    // }
     // Lógica de autenticação bem-sucedida
     setIsLoggedIn(true);
-    navigate('/home'); 
+    setUserId(1);
+    navigate('/home', { state: { userId: 1 } });
   };
 
   const StyledButton = styled(Button)(() => ({
