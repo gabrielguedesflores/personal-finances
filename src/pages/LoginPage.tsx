@@ -1,26 +1,24 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
 import { Typography, TextField, Button, Box } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import { styled, useTheme } from '@mui/system';
+import { AuthContext } from '../contexts/AuthContext';
 
 const LoginPage: React.FC<{ isLoggedIn: boolean; setIsLoggedIn: (value: boolean) => void }> = ({ isLoggedIn, setIsLoggedIn }) => {
   const theme = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userId, setUserId] = useState<number | null>(null);
-  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
-  const handleLogin = () => {
+  const handleLoginClick = () => {
     // Lógica de autenticação
     // if (email.trim() === '' || password.trim() === '') {
     //   alert('Por favor, preencha todos os campos.');
     //   return;
     // }
     // Lógica de autenticação bem-sucedida
+    login(email, password);
     setIsLoggedIn(true);
-    setUserId(1);
-    navigate('/home', { state: { userId: 1 } });
   };
 
   const StyledButton = styled(Button)(() => ({
@@ -60,7 +58,7 @@ const LoginPage: React.FC<{ isLoggedIn: boolean; setIsLoggedIn: (value: boolean)
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <StyledButton variant="contained" fullWidth onClick={handleLogin}>
+        <StyledButton variant="contained" fullWidth onClick={handleLoginClick}>
           Login <LoginIcon sx={{ fontSize: 40, color: theme.palette.primary.contrastText }} />
         </StyledButton>
       </Box>
