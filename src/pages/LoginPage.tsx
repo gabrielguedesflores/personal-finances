@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Typography, TextField, Button, Box } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import { styled, useTheme } from '@mui/system';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthProvider';
 
 const LoginPage: React.FC<{ isLoggedIn: boolean; setIsLoggedIn: (value: boolean) => void }> = ({ isLoggedIn, setIsLoggedIn }) => {
   const theme = useTheme();
@@ -10,14 +10,12 @@ const LoginPage: React.FC<{ isLoggedIn: boolean; setIsLoggedIn: (value: boolean)
   const [password, setPassword] = useState('');
   const { login } = useContext(AuthContext);
 
-  const handleLoginClick = () => {
-    // Lógica de autenticação
-    // if (email.trim() === '' || password.trim() === '') {
-    //   alert('Por favor, preencha todos os campos.');
-    //   return;
-    // }
-    // Lógica de autenticação bem-sucedida
-    login(email, password);
+  const handleLoginClick = async () => {
+    const userData = await login(email, password);
+    if (!userData) {
+      alert('Email or password incorrect!');
+      return false;
+    }
     setIsLoggedIn(true);
   };
 
