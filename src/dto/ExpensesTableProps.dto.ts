@@ -1,6 +1,6 @@
 import { IUserTypeDTO } from "./UserType.dto";
 
-export interface IExpensesFormPropsDTO {
+export interface IExpensesTablePropsDTO {
   user: IUserTypeDTO;
-  onExpenseAdded: any;
+  expenseFather: any;
 }

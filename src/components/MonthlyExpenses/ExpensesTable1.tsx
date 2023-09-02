@@ -2,8 +2,8 @@ import React from 'react';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, tableCellClasses } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { IExpenseDTO } from '../../dto/Expense.dto';
-import { IExpensesFormPropsDTO } from '../../dto/ExpensesFormProps.dto';
-import { getMonthlyExpenses } from '../../api/getMonthlyExpenses';
+import { getExpenses } from '../../api/fetchExpenses';
+import { IExpensesTablePropsDTO } from '../../dto/ExpensesTableProps.dto';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -25,21 +25,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const ExpensesTable: React.FC<IExpensesFormPropsDTO> = ({ user }) => {
+const ExpensesTable: React.FC<IExpensesTablePropsDTO> = ({ user, expenseFather }) => {
   const [monthlyExpenses, setMonthlyExpenses] = React.useState<IExpenseDTO[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     if (user) {
       const fetchMonthlyExpenses = async () => {
-        const expenses = await getMonthlyExpenses(user.userId);
+        const expenses = await getExpenses(user.userId);
         console.log(expenses);
         setMonthlyExpenses(expenses);
-        setLoading(false); // Definindo loading como falso após buscar as despesas
+        setLoading(false);
       };
       fetchMonthlyExpenses();
     }
-  }, [user]); 
+  }, [expenseFather, user]); 
 
   const handleEditExpense = (index: number, newValue: number) => {
     const updatedExpenses = [...monthlyExpenses];
