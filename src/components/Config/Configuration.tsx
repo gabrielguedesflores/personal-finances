@@ -9,26 +9,15 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import AddressForm from './AddressForm';
+import UserData from './UserData';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
 import Copyright from '../Copyright/Index';
+import { IUserTypeDTO } from '../../dto/UserType.dto';
 
 const steps = ['Dados de Usuário', 'Personalizar', 'Visualização'];
 
-function getStepContent(step: number) {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <PaymentForm />;
-    case 2:
-      return <Review />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
-const Configuration: React.FC = () => {
+const Configuration: React.FC<{ user: IUserTypeDTO }> = ({ user }) => {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
@@ -39,9 +28,21 @@ const Configuration: React.FC = () => {
     setActiveStep(activeStep - 1);
   };
 
+  function getStepContent(step: number) {
+    switch (step) {
+      case 0:
+        return <UserData user={user} />;
+      case 1:
+        return <PaymentForm />;
+      case 2:
+        return <Review />;
+      default:
+        throw new Error('Unknown step');
+    }
+  }
+  
   return (
     <React.Fragment>
-      {/* <Container component="main" maxWidth="sm" sx={{ mb: 4 }}> */}
       <Container component="main" sx={{ flex: 1, padding: 2 }} style={{ flex: 1, padding: '16px', overflow: 'auto' }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
@@ -79,7 +80,7 @@ const Configuration: React.FC = () => {
                   onClick={handleNext}
                   sx={{ mt: 3, ml: 1 }}
                 >
-                  {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                  {activeStep === steps.length - 1 ? 'Salvar' : 'Próximo'}
                 </Button>
               </Box>
             </React.Fragment>

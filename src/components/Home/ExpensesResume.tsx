@@ -11,6 +11,16 @@ import { IExpenseDTO } from '../../dto/Expense.dto';
 const ExpensesResume: React.FC<{ expenses: IExpenseDTO[] }> = ({ expenses }) => {
   const [renderedExpenses, setRenderedExpenses] = React.useState(5);
 
+  // Função para verificar se uma data está no mês atual
+  const isDateInCurrentMonth = (dateString: string) => {
+    const currentDate = new Date();
+    const expenseDate = new Date(dateString);
+    return currentDate.getMonth() === expenseDate.getMonth() && currentDate.getFullYear() === expenseDate.getFullYear();
+  };
+
+  // Filtra as despesas para manter apenas as do mês atual
+  const expensesForCurrentMonth = expenses.filter((expense) => isDateInCurrentMonth(expense.date));
+
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
@@ -26,7 +36,7 @@ const ExpensesResume: React.FC<{ expenses: IExpenseDTO[] }> = ({ expenses }) => 
           </TableRow>
         </TableHead>
         <TableBody>
-          {expenses.slice(0, renderedExpenses).map((expense: { date: string | number | Date; description: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; amount: number; tags: any[]; }, index: React.Key | null | undefined) => (
+          {expensesForCurrentMonth.slice(0, renderedExpenses).map((expense, index) => (
             <TableRow key={index}>
               <TableCell>{new Date(expense.date).toLocaleDateString()}</TableCell>
               <TableCell>{expense.description}</TableCell>
@@ -36,11 +46,9 @@ const ExpensesResume: React.FC<{ expenses: IExpenseDTO[] }> = ({ expenses }) => 
           ))}
         </TableBody>
       </Table>
-      {renderedExpenses < expenses.length && (
-        <Link color="primary" href="/gastos-mensais" sx={{ mt: 3 }}>
-          Ver mais despesas
-        </Link>
-      )}
+      <Link color="primary" href="/gastos-mensais" sx={{ mt: 3 }}>
+        Ver mais despesas
+      </Link>
     </React.Fragment>
   );
 };

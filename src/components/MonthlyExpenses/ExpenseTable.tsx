@@ -252,7 +252,7 @@ export default function ExpenseTable(): React.JSX.Element {
               icon={<EditIcon />}
               label="Edit"
               onClick={handleEditClick(id)}
-            />,
+            />
             <GridActionsCellItem
               icon={<DeleteIcon />}
               label="Delete"
@@ -260,8 +260,8 @@ export default function ExpenseTable(): React.JSX.Element {
             />
           </>
         ];
-      },
-    },
+      }
+    }
   ];
 
   return (

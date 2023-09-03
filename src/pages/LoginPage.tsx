@@ -3,6 +3,7 @@ import { Typography, TextField, Button, Box } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import { styled, useTheme } from '@mui/system';
 import { AuthContext } from '../contexts/AuthProvider';
+import Copyright from '../components/Copyright/Index';
 
 const LoginPage: React.FC<{ isLoggedIn: boolean; setIsLoggedIn: (value: boolean) => void }> = ({ isLoggedIn, setIsLoggedIn }) => {
   const theme = useTheme();
@@ -60,6 +61,7 @@ const LoginPage: React.FC<{ isLoggedIn: boolean; setIsLoggedIn: (value: boolean)
           Login <LoginIcon sx={{ fontSize: 40, color: theme.palette.primary.contrastText }} />
         </StyledButton>
       </Box>
+      <Copyright />
     </Box>
   );
 };
