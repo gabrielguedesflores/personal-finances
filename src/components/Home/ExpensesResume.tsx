@@ -6,92 +6,43 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Typography } from '@mui/material';
+import { IExpenseDTO } from '../../dto/Expense.dto';
 
-// Generate Order Data
-function createData(
-  id: number,
-  date: string,
-  name: string,
-  shipTo: string,
-  paymentMethod: string,
-  amount: number,
-) {
-  return { id, date, name, shipTo, paymentMethod, amount };
-}
+const ExpensesResume: React.FC<{ expenses: IExpenseDTO[] }> = ({ expenses }) => {
+  const [renderedExpenses, setRenderedExpenses] = React.useState(5);
 
-const rows = [
-  createData(
-    0,
-    '16 Mar, 2019',
-    'Elvis Presley',
-    'Tupelo, MS',
-    'VISA ⠀•••• 3719',
-    312.44,
-  ),
-  createData(
-    1,
-    '16 Mar, 2019',
-    'Paul McCartney',
-    'London, UK',
-    'VISA ⠀•••• 2574',
-    866.99,
-  ),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-  createData(
-    3,
-    '16 Mar, 2019',
-    'Michael Jackson',
-    'Gary, IN',
-    'AMEX ⠀•••• 2000',
-    654.39,
-  ),
-  createData(
-    4,
-    '15 Mar, 2019',
-    'Bruce Springsteen',
-    'Long Branch, NJ',
-    'VISA ⠀•••• 5919',
-    212.79,
-  ),
-];
-
-function preventDefault(event: React.MouseEvent) {
-  event.preventDefault();
-}
-
-const ExpensesResume: React.FC = () => {
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
-        Recent Orders
+        Gastos Mensais
       </Typography>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Ship To</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
+            <TableCell>Data</TableCell>
+            <TableCell>Descrição</TableCell>
+            <TableCell>Valor</TableCell>
+            <TableCell>Tags</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`$${row.amount}`}</TableCell>
+          {expenses.slice(0, renderedExpenses).map((expense: { date: string | number | Date; description: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; amount: number; tags: any[]; }, index: React.Key | null | undefined) => (
+            <TableRow key={index}>
+              <TableCell>{new Date(expense.date).toLocaleDateString()}</TableCell>
+              <TableCell>{expense.description}</TableCell>
+              <TableCell>{`R$ ${expense.amount.toFixed(2)}`}</TableCell>
+              <TableCell>{expense.tags.join(', ')}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-        See more orders
-      </Link>
+      {renderedExpenses < expenses.length && (
+        <Link color="primary" href="/gastos-mensais" sx={{ mt: 3 }}>
+          Ver mais despesas
+        </Link>
+      )}
     </React.Fragment>
   );
-}
+};
 
 export default ExpensesResume;

@@ -1,10 +1,33 @@
 import React from 'react';
 import { Box, Typography, Divider, Paper, Link, Container, Grid } from '@mui/material';
-import ExpensesResume from '../Home/ExpensesResume';
 import Chart from '../Home/Chart';
+import ExpenseTotal from '../Home/ExpenseTotal';
+import ExpensesResume from '../Home/ExpensesResume';
 import Copyright from '../Copyright/Index';
+import { AuthContext } from '../../contexts/AuthProvider';
+import { getExpenses } from '../../api/fetchExpenses';
+import { IExpenseDTO } from '../../dto/Expense.dto';
 
 const PanelGeneral: React.FC = () => {
+  const [expenses, setExpenses] = React.useState<IExpenseDTO[]>([]);
+  const { user } = React.useContext(AuthContext);
+  
+  React.useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        if (user) {
+          const response = await getExpenses(user.userId);
+          setExpenses(response); // Não é necessário acessar .data, pois você já fez isso na API
+        }
+      } catch (error) {
+        console.error('Error fetching monthly expenses:', error);
+        setExpenses([]);
+      }
+    };
+
+    fetchExpenses();
+  }, []);
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Grid container spacing={3}>
@@ -17,39 +40,17 @@ const PanelGeneral: React.FC = () => {
               height: 240,
             }}
           >
-            <Chart />
+            <Chart expenses={expenses} />
           </Paper>
         </Grid>
 
         <Grid item xs={12} md={4} lg={3}>
-          <Paper
-            sx={{
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              height: 240,
-            }}
-          >
-            <Typography component="h2" variant="h6" color="primary" gutterBottom>
-              Gastos
-            </Typography>
-            <Typography component="p" variant="h4">
-              $3,024.00
-            </Typography>
-            <Typography color="text.secondary" sx={{ flex: 1 }}>
-              on 15 March, 2019
-            </Typography>
-            <div>
-              <Link color="primary" href="#">
-                View balance
-              </Link>
-            </div>
-          </Paper>
+          <ExpenseTotal expenses={expenses}/>
         </Grid>
-        {/* Recent Orders */}
+
         <Grid item xs={12}>
           <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-            <ExpensesResume />
+            <ExpensesResume expenses={expenses} />
           </Paper>
         </Grid>
       </Grid>

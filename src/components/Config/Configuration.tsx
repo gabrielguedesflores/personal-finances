@@ -1,6 +1,4 @@
 import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
@@ -43,7 +41,8 @@ const Configuration: React.FC = () => {
 
   return (
     <React.Fragment>
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+      {/* <Container component="main" maxWidth="sm" sx={{ mb: 4 }}> */}
+      <Container component="main" sx={{ flex: 1, padding: 2 }} style={{ flex: 1, padding: '16px', overflow: 'auto' }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
             Configurações

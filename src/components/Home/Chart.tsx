@@ -2,35 +2,27 @@ import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import { Typography } from '@mui/material';
+import { IExpenseDTO } from '../../dto/Expense.dto';
 
-// Generate Sales Data
-function createData(time: string, amount?: number) {
-  return { time, amount };
+function generateChartData(expenses: any[]) {
+  return expenses.map((expense, index) => ({
+    time: `${index + 1}`,
+    amount: expense.amount,
+  }));
 }
 
-const data = [
-  createData('00:00', 0),
-  createData('03:00', 300),
-  createData('06:00', 600),
-  createData('09:00', 800),
-  createData('12:00', 1500),
-  createData('15:00', 2000),
-  createData('18:00', 2400),
-  createData('21:00', 2400),
-  createData('24:00', undefined),
-];
-
-const Chart: React.FC = () => {
+const Chart: React.FC<{ expenses: IExpenseDTO[] }> = ({ expenses }) => {
   const theme = useTheme();
+  const chartData = generateChartData(expenses);
 
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
-        Today
+        Despesas Mensais
       </Typography>
-      <ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={200}>
         <LineChart
-          data={data}
+          data={chartData}
           margin={{
             top: 16,
             right: 16,
@@ -56,7 +48,7 @@ const Chart: React.FC = () => {
                 ...theme.typography.body1,
               }}
             >
-              Sales ($)
+              Valor (R$)
             </Label>
           </YAxis>
           <Line
