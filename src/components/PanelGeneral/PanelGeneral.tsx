@@ -1,36 +1,61 @@
 import React from 'react';
-import { Box, Typography, Divider, Paper } from '@mui/material';
+import { Box, Typography, Divider, Paper, Link, Container, Grid } from '@mui/material';
+import ExpensesResume from '../Home/ExpensesResume';
+import Chart from '../Home/Chart';
+import Copyright from '../Copyright/Index';
 
 const PanelGeneral: React.FC = () => {
   return (
-    <Box sx={{ flex: 1, padding: 2 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Visão geral dos gastos
-      </Typography>
-      <Divider />
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={8} lg={9}>
+          <Paper
+            sx={{
+              p: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              height: 240,
+            }}
+          >
+            <Chart />
+          </Paper>
+        </Grid>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-        <Paper sx={{ p: 2, mt: 2, width: 300 }}>
-          <Typography variant="subtitle1" gutterBottom>
-            Saldo Total
-          </Typography>
-          <Typography variant="h6" gutterBottom>
-            R$ 10.000,00
-          </Typography>
-        </Paper>
-
-        <Paper sx={{ p: 2, mt: 2, width: 300 }}>
-          <Typography variant="subtitle1" gutterBottom>
-            Gastos Mensais
-          </Typography>
-          <Typography variant="h6" gutterBottom>
-            R$ 2.500,00
-          </Typography>
-        </Paper>
-
-        {/* Adicione mais cards de resumo aqui */}
-      </Box>
-    </Box>
+        <Grid item xs={12} md={4} lg={3}>
+          <Paper
+            sx={{
+              p: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              height: 240,
+            }}
+          >
+            <Typography component="h2" variant="h6" color="primary" gutterBottom>
+              Gastos
+            </Typography>
+            <Typography component="p" variant="h4">
+              $3,024.00
+            </Typography>
+            <Typography color="text.secondary" sx={{ flex: 1 }}>
+              on 15 March, 2019
+            </Typography>
+            <div>
+              <Link color="primary" href="#">
+                View balance
+              </Link>
+            </div>
+          </Paper>
+        </Grid>
+        {/* Recent Orders */}
+        <Grid item xs={12}>
+          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+            <ExpensesResume />
+          </Paper>
+        </Grid>
+      </Grid>
+      
+      <Copyright />
+    </Container>
   );
 };
 

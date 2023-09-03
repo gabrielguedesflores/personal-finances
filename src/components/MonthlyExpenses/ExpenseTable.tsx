@@ -95,13 +95,13 @@ function EditToolbar(props: EditToolbarProps) {
   return (
     <GridToolbarContainer>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
+        Adicionar Despesa
       </Button>
     </GridToolbarContainer>
   );
 }
 
-export default function FullFeaturedCrudGrid() {
+export default function ExpenseTable(): React.JSX.Element {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
   const { user } = React.useContext(AuthContext);
@@ -111,12 +111,10 @@ export default function FullFeaturedCrudGrid() {
       try {
         if (user) {
           const expenses = await getExpenses(user.userId);
-
-          // Transform the fetched expenses to include 'id' field
           const transformedExpenses = expenses.map((expense: { expenseId: any; }) => ({
             ...expense,
             id: expense.expenseId,
-            isNew: false, // Assuming expenses from API are not new
+            isNew: false, 
           }));
 
           setRows(transformedExpenses);
@@ -143,7 +141,7 @@ export default function FullFeaturedCrudGrid() {
     console.log('editedRow', editedRow);
     const newExpense: any = {
       amount: editedRow.amount,
-      date: new Date().toISOString(), // Use a data atual aqui
+      date: new Date().toISOString(),
       description: editedRow.description,
       tags: editedRow.tags, // Use as tags da linha editada
       userId: editedRow.userId,
@@ -195,10 +193,10 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const columns: GridColDef[] = [
-    { field: 'description', headerName: 'Description', width: 220, editable: true },
+    { field: 'description', headerName: 'Descrição', width: 220, editable: true },
     {
       field: 'amount',
-      headerName: 'Amount',
+      headerName: 'Valor',
       type: 'number',
       width: 120,
       align: 'left',
@@ -207,7 +205,7 @@ export default function FullFeaturedCrudGrid() {
     },
     {
       field: 'date',
-      headerName: 'Date',
+      headerName: 'Data',
       type: 'date',
       width: 180,
       editable: true,
@@ -218,45 +216,49 @@ export default function FullFeaturedCrudGrid() {
       headerName: 'Tags',
       width: 220,
       editable: true,
-      renderCell: (params) => (
-        <div>{params.value ? params.value.join(', ') : ''}</div>
+      renderCell: (params): any => (
+        <>{params.value ? params.value.join(', ') : ''}</>
       ),
     },
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: 'Ações',
       width: 140,
       cellClassName: 'actions',
-      getActions: ({ id }) => {
+      getActions: ({ id }): any | React.ReactNode => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              onClick={handleCancelClick(id)}
-            />,
+            <>
+              <GridActionsCellItem
+                icon={<SaveIcon />}
+                label="Save"
+                onClick={handleSaveClick(id)}
+              />
+              <GridActionsCellItem
+                icon={<CancelIcon />}
+                label="Cancel"
+                onClick={handleCancelClick(id)}
+              />
+            </>
           ];
         }
 
         return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            onClick={handleEditClick(id)}
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-          />,
+          <>
+            <GridActionsCellItem
+              icon={<EditIcon />}
+              label="Edit"
+              onClick={handleEditClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<DeleteIcon />}
+              label="Delete"
+              onClick={handleDeleteClick(id)}
+            />
+          </>
         ];
       },
     },

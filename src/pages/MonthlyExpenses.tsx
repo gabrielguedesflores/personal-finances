@@ -4,10 +4,8 @@ import { Box, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import Sidebar from '../components/Sidebar/Sidebar';
-import ExpensesForm from '../components/MonthlyExpenses/ExpenseForm';
-import ExpensesTable from '../components/MonthlyExpenses/ExpensesTable1';
 import { IExpenseDTO } from '../dto/Expense.dto';
-import FullFeaturedCrudGrid from '../components/MonthlyExpenses/ExpenseTable';
+import ExpenseTable from '../components/MonthlyExpenses/ExpenseTable';
 
 const MonthlyExpenses: React.FC = () => {
   const { user } = React.useContext(AuthContext);
@@ -25,7 +23,8 @@ const MonthlyExpenses: React.FC = () => {
           </Typography>
           {/* <ExpensesForm user={user!} onExpenseAdded={handleExpenseAdded!} /> */}
           {/* <ExpensesTable user={user!} expenseFather={monthlyExpenses!} /> */}
-          <FullFeaturedCrudGrid />
+          
+          <ExpenseTable />
         </Box>
       </Box>
     </LocalizationProvider>
