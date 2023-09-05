@@ -19,9 +19,7 @@ export const postExpenses = async (expense: any) => {
     description: expense!.description,
     amount: expense!.amount,
     date: new Date(expense!.date),
-    tags: [
-      "tag1", "tag2", "tag3"
-    ],
+    tags: expense!.tags,
   }
   try {
     const response = await axios.post(`${API_BASE_URL}/expenses/v1/expense`, newExpense);
@@ -34,7 +32,7 @@ export const postExpenses = async (expense: any) => {
 
 export const updateExpense = async (expense: IExpenseDTO) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}/expenses/${expense.expenseId}`, expense);
+    const response = await axios.put(`${API_BASE_URL}/expenses/v1/expense/${expense.expenseId}`, expense);
     return response.data;
   } catch (error) {
     console.error('Error updating expense:', error);
@@ -44,7 +42,7 @@ export const updateExpense = async (expense: IExpenseDTO) => {
 
 export const deleteExpense = async (expenseId: any) => {
   try {
-    const response = await axios.delete(`${API_BASE_URL}/expenses/${expenseId}`);
+    const response = await axios.delete(`${API_BASE_URL}/expenses/v1/expense/${expenseId}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting expense:', error);

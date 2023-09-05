@@ -8,7 +8,8 @@ const Sidebar: React.FC = () => {
     <Box sx={{
       width: 240,
       backgroundColor: "var(--chatgpt-background-sidebar)",
-      padding: 2, height: "100vh",
+      padding: 2, 
+      height: "150vh",
     }}>
       <img src="/logo.png" alt="Logo" style={{ height: 90, marginRight: 10 }} />     
       <Divider />

@@ -27,7 +27,6 @@ import {
 } from '@mui/x-data-grid-generator';
 import { getExpenses, postExpenses, updateExpense, deleteExpense } from '../../api/fetchExpenses';
 import { AuthContext } from '../../contexts/AuthProvider';
-import { log } from 'console';
 import { IExpenseDTO } from '../../dto/Expense.dto';
 
 const roles = ['Market', 'Finance', 'Development'];
@@ -35,43 +34,7 @@ const randomRole = () => {
   return randomArrayItem(roles);
 };
 
-const initialRows: GridRowsProp = [
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-];
+const initialRows: GridRowsProp = [];
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -85,10 +48,21 @@ function EditToolbar(props: EditToolbarProps) {
 
   const handleClick = () => {
     const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
+    // Criar uma nova linha vazia com o ID gerado aleatoriamente
+    const newEmptyRow = {
+      id,
+      description: '',
+      amount: 0,
+      date: new Date().toISOString(),
+      tags: '',
+      isNew: true,
+    };
+    // Adicionar a nova linha ao estado das linhas
+    setRows((oldRows) => [...oldRows, newEmptyRow]);
+    // Definir o modo de edição para a nova linha, focando no campo de descrição
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'description' },
     }));
   };
 
@@ -114,7 +88,7 @@ export default function ExpenseTable(): React.JSX.Element {
           const transformedExpenses = expenses.map((expense: { expenseId: any; }) => ({
             ...expense,
             id: expense.expenseId,
-            isNew: false, 
+            isNew: false,
           }));
 
           setRows(transformedExpenses);
@@ -137,28 +111,42 @@ export default function ExpenseTable(): React.JSX.Element {
   };
 
   const handleSaveClick = (id: GridRowId) => async () => {
-    const editedRow: any = rows.find((row) => row.id === id);
-    console.log('editedRow', editedRow);
-    const newExpense: any = {
-      amount: editedRow.amount,
-      date: new Date().toISOString(),
-      description: editedRow.description,
-      tags: editedRow.tags, // Use as tags da linha editada
-      userId: editedRow.userId,
-    };
-  
     try {
-      const createdExpense = await postExpenses(newExpense); // Use a função correta para criar a despesa
-      const updatedRows = rows.map((row) =>
-        row.id === id ? { ...row, ...createdExpense } : row
-      );
-      setRows(updatedRows);
+      const editedRow = rows.find((row) => row.id === id);
+      console.log('editedRow', editedRow);
+
+      if (!editedRow) {
+        // Lidar com o caso em que a linha editada não foi encontrada
+        return;
+      }
+
+      const newExpense: IExpenseDTO = {
+        expenseId: editedRow.expenseId,
+        userId: editedRow.userId,
+        description: editedRow.description,
+        amount: parseFloat(editedRow.amount as string), // Certifique-se de converter para número
+        date: editedRow.date,
+        tags: editedRow.tags,
+      };
+
+      if (editedRow.isNew) {
+        // Se for uma nova despesa, crie-a
+        const createdExpense = await postExpenses(newExpense);
+        const updatedRows = rows.map((row) =>
+          row.id === id ? { ...row, ...createdExpense, isNew: false } : row
+        );
+        setRows(updatedRows);
+      } else {
+        // Se não for uma nova despesa, atualize-a
+        await updateExpense(newExpense);
+      }
+
       setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
     } catch (error) {
       // Lide com o erro
+      console.error('Erro ao salvar despesa:', error);
     }
   };
-  
 
   const handleDeleteClick = (id: GridRowId) => async () => {
     try {
@@ -217,7 +205,7 @@ export default function ExpenseTable(): React.JSX.Element {
       width: 220,
       editable: true,
       renderCell: (params): any => (
-        <>{params.value ? params.value.join(', ') : ''}</>
+        <>{Array.isArray(params.value) ? params.value.join(', ') : params.value}</>
       ),
     },
     {

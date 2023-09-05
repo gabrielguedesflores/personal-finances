@@ -7,6 +7,7 @@ import Copyright from '../Copyright/Index';
 import { AuthContext } from '../../contexts/AuthProvider';
 import { getExpenses } from '../../api/fetchExpenses';
 import { IExpenseDTO } from '../../dto/Expense.dto';
+import BarsDataset from '../Home/BarChart';
 
 const PanelGeneral: React.FC = () => {
   const [expenses, setExpenses] = React.useState<IExpenseDTO[]>([]);
@@ -51,6 +52,12 @@ const PanelGeneral: React.FC = () => {
         <Grid item xs={12}>
           <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
             <ExpensesResume expenses={expenses} />
+          </Paper>
+        </Grid>
+
+        <Grid item xs={6} md={6}>
+          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+            <BarsDataset  />
           </Paper>
         </Grid>
       </Grid>
